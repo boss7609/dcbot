@@ -52,7 +52,6 @@ body {
   background: var(--bg-body);
   color: var(--text-body);
   line-height: 1.6;
-  overflow-y: scroll;
 }
 
 #app {
@@ -93,6 +92,32 @@ button:active {
 button.group {
   width: 100%;
 }
+
+button.item {
+  width: 95%;
+  min-width: 160px;
+  max-width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  text-align: left;
+  white-space: normal;
+  background-color: var(--gray-light);
+  color: var(--text-body);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+button.item.completed {
+  background-color: var(--success);
+  color: var(--text-light);
+}
+
+button.item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 
 /* ✨ 類別變體 */
 .room,
@@ -221,16 +246,19 @@ button.puzzle {
   background-color: var(--primary);
   color: white;
   padding: 12px 20px;
-  margin: 10px 0;
+  margin: 10px 0 10px 8px; /* <-- auto 表示往右推 */
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  display: block;        /* 讓它獨佔一行 */
+  width: fit-content;    /* 寬度剛好包住文字 */
 }
 
+
 .puzzle-content {
-  background: #f7fafc;
-  border: 2px solid #cbd5e0;
+  background: #fffdf5; /* 比純白稍微暖一點 */
+  border: 2px solid #aaa; /* 比原本的淺灰明顯一些 */
   border-radius: 8px;
   padding: 15px;
   margin: 10px 0;
@@ -238,9 +266,29 @@ button.puzzle {
   font-size: 16px;
   line-height: 1.6;
   color: #2d3748;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   white-space: pre-line;
 }
+
+button.view-image {
+  background-color: var(--primary); /* 跟 .puzzle 一樣的粉色 */
+  color: white;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease, transform 0.15s ease-out;
+}
+
+button.view-image:hover {
+  background-color: #e28580; /* hover 時稍微深一點的粉色 */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 
 /* ===================
    🪟 自訂 Modal 樣式
@@ -292,26 +340,4 @@ button.puzzle {
     transform: scale(1);
   }
 }
-/* 圖片查看按鈕樣式 */
-.view-image {
-    background-color: var(--bg-body);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
 
-.view-image:hover {
-    background-color: var(--hover-color);
-}
-
-/* 圖片彈出層動畫 */
-.image-modal {
-    animation: fadeIn 0.3s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
