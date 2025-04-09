@@ -110,76 +110,73 @@ function showGroupList(room) {
 
   if (!expandedGroupStates[room]) expandedGroupStates[room] = {};
 
-  let expandedGroup = null;
-
   for (const groupName in data[room].groups) {
     const groupData = data[room].groups[groupName];
     const key = `status_${room}_${groupName}`;
     const saved = JSON.parse(localStorage.getItem(key) || "{}");
     const total = groupData.items.length;
     const done = groupData.items.filter(item => saved[item]).length;
-
+    const wrapper = document.createElement("div");
+    // 按鈕本體
     const btn = document.createElement("button");
     btn.className = `group group-${groupData.color}`;
     btn.textContent = `${done === total && total > 0 ? '✅ ' : '🟩'}${groupName} (${done}/${total})`;
-
     if (groupName === currentGroup) btn.classList.add("active");
     if (done === total && total > 0) btn.classList.add("completed");
 
+    // 切換展開物品清單
     btn.onclick = () => {
-      const wasOpen = expandedGroupStates[room][groupName];
-      for (const g in expandedGroupStates[room]) expandedGroupStates[room][g] = false;
-      expandedGroupStates[room][groupName] = !wasOpen;
-      currentGroup = groupName;
-      showGroupList(room);
-    };
+	  const wasExpanded = expandedGroupStates[room][groupName];
+	  // 關閉所有區域
+	  for (const g in expandedGroupStates[room]) {
+		expandedGroupStates[room][g] = false;
+	  }
+	  // 如果原本是關的，現在打開；原本是開的，就保持關
+	  expandedGroupStates[room][groupName] = !wasExpanded;
+	  currentGroup = groupName;
+	  showGroupList(room);
+	};
+    wrapper.appendChild(btn);
 
-    if (expandedGroupStates[room][groupName]) expandedGroup = groupName;
+    // 物品清單 (展開)
+    if (expandedGroupStates[room][groupName]) {
+      const itemWrapper = document.createElement("div");
+      itemWrapper.style.margin = "10px 0";
+      itemWrapper.style.padding = "10px";
+      itemWrapper.style.border = "1px solid var(--border-color)";
+      itemWrapper.style.borderRadius = "8px";
+      itemWrapper.style.background = "var(--bg-body)";
 
-    groupContainer.appendChild(btn);
+      groupData.items.forEach(item => {
+        const itemBtn = document.createElement("button");
+        itemBtn.className = "item";
+        if (saved[item]) itemBtn.classList.add("completed");
+        itemBtn.textContent = saved[item] ? `✅ ${item}` : `🟩 ${item}`;
+        itemBtn.onclick = () => {
+          saved[item] = !saved[item];
+          localStorage.setItem(key, JSON.stringify(saved));
+          showGroupList(room);
+        };
+        itemWrapper.appendChild(itemBtn);
+      });
+
+      // 單一清單的 reset
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "reset";
+      resetBtn.textContent = "↻ 重置該清單";
+      resetBtn.onclick = () => {
+        localStorage.removeItem(key);
+        showGroupList(room);
+      };
+      itemWrapper.appendChild(resetBtn);
+      wrapper.appendChild(itemWrapper);
+    }
+    groupContainer.appendChild(wrapper);
   }
 
   groupSection.appendChild(groupContainer);
   app.appendChild(groupSection);
 
-  // ========== 展開區域的物品清單 ==========
-  if (expandedGroup) {
-    const groupData = data[room].groups[expandedGroup];
-    const key = `status_${room}_${expandedGroup}`;
-    const saved = JSON.parse(localStorage.getItem(key) || "{}");
-
-    const itemSection = document.createElement("div");
-    itemSection.style.margin = "10px 0";
-    itemSection.style.padding = "10px";
-    itemSection.style.border = "1px solid var(--border-color)";
-    itemSection.style.borderRadius = "8px";
-    itemSection.style.background = "var(--bg-body)";
-
-    groupData.items.forEach(item => {
-      const itemBtn = document.createElement("button");
-      itemBtn.className = "item";
-      if (saved[item]) itemBtn.classList.add("completed");
-      itemBtn.textContent = saved[item] ? `✅ ${item}` : `🟩 ${item}`;
-      itemBtn.onclick = () => {
-        saved[item] = !saved[item];
-        localStorage.setItem(key, JSON.stringify(saved));
-        showGroupList(room);
-      };
-      itemSection.appendChild(itemBtn);
-    });
-
-    const resetBtn = document.createElement("button");
-    resetBtn.className = "reset";
-    resetBtn.textContent = "↻ 重置該清單";
-    resetBtn.onclick = () => {
-      localStorage.removeItem(key);
-      showGroupList(room);
-    };
-    itemSection.appendChild(resetBtn);
-    app.appendChild(itemSection);
-  }
-
-  // ========== 功能按鈕 ==========
   const action = document.createElement("div");
   action.className = "action-buttons";
 
@@ -201,7 +198,6 @@ function showGroupList(room) {
   action.appendChild(resetBtn);
   app.appendChild(action);
 }
-
 
 
 function showItemList(room, group) {
