@@ -331,12 +331,16 @@ function renderPuzzleSection(room) {
     const puzzleToggleBtn = document.createElement("button");
     puzzleToggleBtn.className = "puzzle";
     puzzleToggleBtn.textContent = "🧩 查看本區謎題";
+    
     const puzzleContent = document.createElement("div");
     puzzleContent.className = "puzzle-content";
     puzzleContent.style.display = "none";
-    puzzleContent.style.whiteSpace = "pre-line"; // <--- 關鍵樣式
+    puzzleContent.style.whiteSpace = "pre-line";
+
     // 根據房間決定謎題內容
     let puzzleText = "";
+    let imagePath = "";
+    
     if (room === "國中房與紙條房") {
         puzzleText = "課表順序 ➔ 國文-英文-數學/國文-英文-數學\n巧克力順序:96%,30^";
     } else if (room === "考卷通道與國中大考房") {
@@ -347,12 +351,91 @@ function renderPuzzleSection(room) {
         puzzleText = "售票機 ➔ 2人 ➔ 穿著Prada的惡魔 ➔ 17:25";
     } else if (room === "高三大考房") {
         puzzleText = "國文科 ➔ A:鈞啟 B:謹緘 C:恭請 D:崇安 E:謹上\n數學科 ➔ 615m\n英文科 ➔ A:in B:on\n社會科 ➔ 雙首長制\n自然科 ➔ 6-甲基-3-辛酮";
+        imagePath = "images/room5-puzzle1.jpg";
     } else if (room === "自殺房") {
         puzzleText = "鑰匙鎖\n小 ➔ 不要重蹈覆轍\n中 ➔ 當媽媽的魁儡\n大 ➔ 怎麼會這樣\n特大 ➔ 2月29日\n盲人鎖\n▢▣\n▣▢\n▢▢\n▣▣";
     } else {
         puzzleText = `${room} 此處無謎題。`;
     }
+
     puzzleContent.textContent = puzzleText;
+
+    // 如果有圖片，添加查看圖片按鈕
+    if (imagePath) {
+        const imageBtn = document.createElement("button");
+        imageBtn.className = "view-image";
+        imageBtn.textContent = "🖼️ 查看謎題圖片";
+        imageBtn.style.marginTop = "10px";
+        imageBtn.style.display = "block";
+        
+        imageBtn.onclick = () => {
+            // 創建圖片彈出層
+            const modal = document.createElement("div");
+            modal.className = "image-modal";
+            modal.style.position = "fixed";
+            modal.style.top = "0";
+            modal.style.left = "0";
+            modal.style.width = "100%";
+            modal.style.height = "100%";
+            modal.style.backgroundColor = "rgba(0,0,0,0.8)";
+            modal.style.display = "flex";
+            modal.style.justifyContent = "center";
+            modal.style.alignItems = "center";
+            modal.style.zIndex = "1000";
+            
+            // 圖片容器
+            const imgContainer = document.createElement("div");
+            imgContainer.style.position = "relative";
+            imgContainer.style.maxWidth = "90%";
+            imgContainer.style.maxHeight = "90%";
+            
+            // 圖片元素
+            const img = document.createElement("img");
+            img.src = imagePath;
+            img.style.maxWidth = "100%";
+            img.style.maxHeight = "90vh";
+            img.style.borderRadius = "8px";
+            
+            // 關閉按鈕
+			const closeBtn = document.createElement("button");
+			closeBtn.innerHTML = "&times;"; // 使用HTML實體 &times; 顯示更好的×符號
+			closeBtn.style.position = "absolute";
+			closeBtn.style.top = "10px";
+			closeBtn.style.right = "10px";
+			closeBtn.style.width = "40px";
+			closeBtn.style.height = "40px";
+			closeBtn.style.borderRadius = "50%";
+			closeBtn.style.backgroundColor = "rgba(255, 68, 68, 0.9)";
+			closeBtn.style.color = "white";
+			closeBtn.style.border = "none";
+			closeBtn.style.fontSize = "24px";
+			closeBtn.style.fontWeight = "bold";
+			closeBtn.style.cursor = "pointer";
+			closeBtn.style.display = "flex";
+			closeBtn.style.justifyContent = "center";
+			closeBtn.style.alignItems = "center";
+			closeBtn.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
+			closeBtn.style.transition = "all 0.2s ease";
+            
+            closeBtn.onclick = () => {
+                document.body.removeChild(modal);
+            };
+            
+            // 點擊背景關閉
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            };
+            
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(closeBtn);
+            modal.appendChild(imgContainer);
+            document.body.appendChild(modal);
+        };
+        
+        puzzleContent.appendChild(imageBtn);
+    }
 
     // 使用記憶狀態來決定是否展開
     const visible = puzzleVisibleState[room] ?? false;

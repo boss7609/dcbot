@@ -292,4 +292,26 @@ button.puzzle {
     transform: scale(1);
   }
 }
+/* 圖片查看按鈕樣式 */
+.view-image {
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
 
+.view-image:hover {
+    background-color: var(--hover-color);
+}
+
+/* 圖片彈出層動畫 */
+.image-modal {
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
