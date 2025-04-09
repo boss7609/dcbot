@@ -69,101 +69,138 @@ function showRoomList() {
 }
 
 //區域清單 (修正版)
-function showGroupList(room) {
-    try {
-        app.innerHTML = ""; // 清空容器
-        // ================= 房間選擇區 =================
-        const roomSection = document.createElement("div");
-        roomSection.innerHTML = "<h2>請選擇房間：</h2>";
-        const roomContainer = document.createElement("div");
-        roomContainer.className = "container";
-        // 生成所有房間按鈕
-        for (const r in data) {
-            // 進度計算
-            let completedGroups = 0;
-            const totalGroups = Object.keys(data[r].groups).length;
-            
-            for (const g in data[r].groups) {
-                const key = `status_${r}_${g}`;
-                const saved = JSON.parse(localStorage.getItem(key) || "{}");
-                const totalItems = data[r].groups[g].items.length;
-                const checked = Object.values(saved).filter(Boolean).length;
-                if (totalItems > 0 && checked === totalItems) completedGroups++;
-            }
-            // 創建房間按鈕
-            const btn = document.createElement("button");
-            btn.className = `room ${r === room ? 'active' : ''} ${completedGroups === totalGroups ? 'completed' : ''}`;
-            btn.textContent = `${completedGroups === totalGroups && totalGroups > 0 ? '✅ ' : '🟩'}${r}（${completedGroups}/${totalGroups} 區完成）`;
-            btn.onclick = () => {
-                currentRoom = r;
-                showGroupList(r); // 切換房間
-            };
-            roomContainer.appendChild(btn);
-        }
-        roomSection.appendChild(roomContainer);
-        app.appendChild(roomSection);
-        // ================= 當前房間區域選擇區 =================
-        const groupSection = document.createElement("div");
-        groupSection.innerHTML = `<h2>${room} - 區域選擇：</h2>`;
-        
-        // 加入謎題區
-        groupSection.appendChild(renderPuzzleSection(room));
+// 新增變數記錄展開狀態（像謎題一樣）
+let expandedGroupStates = {}; // 格式：expandedGroupStates[room][group] = true/false
 
-        // 區域按鈕容器
-        const groupContainer = document.createElement("div");
-        groupContainer.className = "container";
-        // 生成區域按鈕
-        const groups = data[room].groups;
-        for (const groupName in groups) {
-            const groupData = groups[groupName];
-            // 創建區域按鈕
-            const btn = document.createElement("button");
-            btn.className = `group group-${groupData.color} ${groupName === currentGroup ? 'active' : ''}`;
-            // 進度統計
-            const key = `status_${room}_${groupName}`;
-            const saved = JSON.parse(localStorage.getItem(key) || "{}");
-            const totalItems = groupData.items.length;
-            const completedCount = groupData.items.filter(item => saved[item]).length;
-            // 設定按鈕內容
-            btn.textContent = `${completedCount === totalItems && totalItems > 0 ? '✅ ' : '🟩'}${groupName} (${completedCount}/${totalItems})`;
-            if (completedCount === totalItems && totalItems > 0) {
-                btn.classList.add("completed");
-            }
-            // 點擊事件
-            btn.onclick = () => {
-                currentGroup = groupName;
-                showItemList(room, groupName); // 進入物品清單
-            };
-            groupContainer.appendChild(btn);
-        }
-        groupSection.appendChild(groupContainer);
-        app.appendChild(groupSection);
-        // ================= 功能按鈕區 =================
-        const actionSection = document.createElement("div");
-        actionSection.className = "action-buttons";
-        // 返回首頁按鈕
-        const backBtn = document.createElement("button");
-        backBtn.className = "back";
-        backBtn.textContent = "← 返回首頁";
-        backBtn.onclick = showRoomList;
-        actionSection.appendChild(backBtn);
-        // 重置按鈕
-        const resetAllBtn = document.createElement("button");
-        resetAllBtn.className = "reset";
-        resetAllBtn.textContent = "↻ 重置整個房間資料";
-        resetAllBtn.onclick = () => {
-            for (const groupName in groups) {
-                localStorage.removeItem(`status_${room}_${groupName}`);
-            }
-            showGroupList(room); // 刷新頁面
-        };
-        actionSection.appendChild(resetAllBtn);
-        app.appendChild(actionSection);
-    } catch (error) {
-        console.error("showGroupList 執行錯誤:", error);
-        app.innerHTML = `<div class="error">系統錯誤：${error.message}</div>`;
+function showGroupList(room) {
+  app.innerHTML = "";
+
+  // ========== 房間選擇區 ==========
+  const roomSection = document.createElement("div");
+  roomSection.innerHTML = "<h2>請選擇房間：</h2>";
+  const roomContainer = document.createElement("div");
+  roomContainer.className = "container";
+
+  for (const r in data) {
+    const totalGroups = Object.keys(data[r].groups).length;
+    let completedGroups = 0;
+    for (const g in data[r].groups) {
+      const key = `status_${r}_${g}`;
+      const saved = JSON.parse(localStorage.getItem(key) || "{}");
+      const total = data[r].groups[g].items.length;
+      const done = Object.values(saved).filter(Boolean).length;
+      if (total > 0 && done === total) completedGroups++;
     }
+    const btn = document.createElement("button");
+    btn.className = `room ${r === room ? 'active' : ''} ${completedGroups === totalGroups ? 'completed' : ''}`;
+    btn.textContent = `${completedGroups === totalGroups && totalGroups > 0 ? '✅ ' : '🟩'}${r}（${completedGroups}/${totalGroups} 區完成）`;
+    btn.onclick = () => showGroupList(r);
+    roomContainer.appendChild(btn);
+  }
+  roomSection.appendChild(roomContainer);
+  app.appendChild(roomSection);
+
+  // ========== 區域選擇 ==========
+  const groupSection = document.createElement("div");
+  groupSection.innerHTML = `<h2>${room} - 區域選擇：</h2>`;
+  groupSection.appendChild(renderPuzzleSection(room));
+
+  const groupContainer = document.createElement("div");
+  groupContainer.className = "container";
+
+  if (!expandedGroupStates[room]) expandedGroupStates[room] = {};
+
+  for (const groupName in data[room].groups) {
+    const groupData = data[room].groups[groupName];
+    const key = `status_${room}_${groupName}`;
+    const saved = JSON.parse(localStorage.getItem(key) || "{}");
+    const total = groupData.items.length;
+    const done = groupData.items.filter(item => saved[item]).length;
+
+    const wrapper = document.createElement("div");
+
+    // 按鈕本體
+    const btn = document.createElement("button");
+    btn.className = `group group-${groupData.color}`;
+    btn.textContent = `${done === total && total > 0 ? '✅ ' : '🟩'}${groupName} (${done}/${total})`;
+    if (groupName === currentGroup) btn.classList.add("active");
+    if (done === total && total > 0) btn.classList.add("completed");
+
+    // 切換展開物品清單
+    btn.onclick = () => {
+	  // ✅ 改為只展開一個區域
+	  for (const g in expandedGroupStates[room]) {
+		expandedGroupStates[room][g] = false;
+	  }
+	  expandedGroupStates[room][groupName] = true;
+	  currentGroup = groupName;
+	  showGroupList(room);
+	};
+    wrapper.appendChild(btn);
+
+    // 物品清單 (展開)
+    if (expandedGroupStates[room][groupName]) {
+      const itemWrapper = document.createElement("div");
+      itemWrapper.style.margin = "10px 0";
+      itemWrapper.style.padding = "10px";
+      itemWrapper.style.border = "1px solid var(--border-color)";
+      itemWrapper.style.borderRadius = "8px";
+      itemWrapper.style.background = "var(--bg-body)";
+
+      groupData.items.forEach(item => {
+        const itemBtn = document.createElement("button");
+        itemBtn.className = "item";
+        if (saved[item]) itemBtn.classList.add("completed");
+        itemBtn.textContent = saved[item] ? `✅ ${item}` : `🟩 ${item}`;
+        itemBtn.onclick = () => {
+          saved[item] = !saved[item];
+          localStorage.setItem(key, JSON.stringify(saved));
+          showGroupList(room);
+        };
+        itemWrapper.appendChild(itemBtn);
+      });
+
+      // 單一清單的 reset
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "reset";
+      resetBtn.textContent = "↻ 重置該清單";
+      resetBtn.onclick = () => {
+        localStorage.removeItem(key);
+        showGroupList(room);
+      };
+      itemWrapper.appendChild(resetBtn);
+
+      wrapper.appendChild(itemWrapper);
+    }
+
+    groupContainer.appendChild(wrapper);
+  }
+
+  groupSection.appendChild(groupContainer);
+  app.appendChild(groupSection);
+
+  const action = document.createElement("div");
+  action.className = "action-buttons";
+
+  const backBtn = document.createElement("button");
+  backBtn.className = "back";
+  backBtn.textContent = "← 返回首頁";
+  backBtn.onclick = showRoomList;
+  action.appendChild(backBtn);
+
+  const resetBtn = document.createElement("button");
+  resetBtn.className = "reset";
+  resetBtn.textContent = "↻ 重置整個房間資料";
+  resetBtn.onclick = () => {
+    for (const g in data[room].groups) {
+      localStorage.removeItem(`status_${room}_${g}`);
+    }
+    showGroupList(room);
+  };
+  action.appendChild(resetBtn);
+  app.appendChild(action);
 }
+
 
 function showItemList(room, group) {
     app.innerHTML = "";
@@ -290,6 +327,7 @@ function showResetModal() {
         showRoomList();
     };
 }
+
 
 //謎題顯示區
 function renderPuzzleSection(room) {
