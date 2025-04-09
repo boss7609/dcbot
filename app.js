@@ -338,19 +338,17 @@ function renderPuzzleSection(room) {
     // 根據房間決定謎題內容
     let puzzleText = "";
     if (room === "國中房與紙條房") {
-        puzzleText = "課表順序:\n國文-英文-數學 \n 國文-英文-數學\n巧克力順序:96%,30^";
+        puzzleText = "課表順序 ➔ 國文-英文-數學/國文-英文-數學\n巧克力順序:96%,30^";
+    } else if (room === "考卷通道與國中大考房") {
+        puzzleText = "自然答案 ➔ Fe*2 \n 國文答案 ➔ 迢迢牽牛星，皎皎河漢女；纖纖擢素手，札札弄機杼\n朝代 ➔ 漢朝\n節日 ➔ 七夕";
     } else if (room === "高中房") {
-        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+        puzzleText = "貓咪紳士予告信 ➔ 圍巾櫃密碼\n中間櫃子密碼 ➔ LOVED";
     } else if (room === "電影院") {
-        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
-    } else if (room === "夜光漆通道") {
-        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+        puzzleText = "售票機 ➔ 2人 ➔ 穿著Prada的惡魔 ➔ 17:25";
     } else if (room === "高三大考房") {
-        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
-    } else if (room === "志願房") {
-        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
-    } else if (room === "最終通道") {
-        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+        puzzleText = "國文科 ➔ A:鈞啟 B:謹緘 C:恭請 D:崇安 E:謹上\n數學科 ➔ 615m\n英文科 ➔ A:in B:on\n社會科 ➔ 雙首長制\n自然科 ➔ 6-甲基-3-辛酮";
+    } else if (room === "自殺房") {
+        puzzleText = "鑰匙鎖\n小 ➔ 不要重蹈覆轍\n中 ➔ 當媽媽的魁儡\n大 ➔ 怎麼會這樣\n特大 ➔ 2月29日\n盲人鎖\n▢▣\n▣▢\n▢▢\n▣▣";
     } else {
         puzzleText = `${room} 此處無謎題。`;
     }

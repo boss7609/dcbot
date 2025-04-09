@@ -52,6 +52,7 @@ body {
   background: var(--bg-body);
   color: var(--text-body);
   line-height: 1.6;
+  overflow-y: scroll;
 }
 
 #app {
@@ -87,6 +88,10 @@ button:hover {
 
 button:active {
   transform: translateY(0);
+}
+
+button.group {
+  width: 100%;
 }
 
 /* ✨ 類別變體 */
@@ -142,6 +147,11 @@ button:active {
   background-color: #a05aff;
   color: white;
 }
+
+.container > div {
+  width: 100%;
+}
+
 
 /* ===================
    🧱 版面排版
@@ -282,3 +292,4 @@ button.puzzle {
     transform: scale(1);
   }
 }
+
