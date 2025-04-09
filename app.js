@@ -2,6 +2,7 @@ let data = {};
 let currentRoom = null;
 let currentGroup = null;
 let puzzleVisibleState = {}; // 每個房間一個記錄
+let expandedGroupStates = {}; // 格式：expandedGroupStates[room][group] = true/false
 const app = document.getElementById("app");
 
 //匯入Json
@@ -68,10 +69,7 @@ function showRoomList() {
     app.appendChild(container);
 }
 
-//區域清單 (修正版)
-// 新增變數記錄展開狀態（像謎題一樣）
-let expandedGroupStates = {}; // 格式：expandedGroupStates[room][group] = true/false
-
+//區域清單
 function showGroupList(room) {
   app.innerHTML = "";
 
@@ -199,7 +197,7 @@ function showGroupList(room) {
   app.appendChild(action);
 }
 
-
+//物品清單
 function showItemList(room, group) {
     app.innerHTML = "";
     // 1. 房間選擇區 (保持不變)
@@ -300,6 +298,7 @@ function showItemList(room, group) {
     app.appendChild(actionSection);
 }
 
+//重製功能
 function showResetModal() {
     const modal = document.createElement("div");
     modal.className = "modal-overlay";
@@ -326,7 +325,6 @@ function showResetModal() {
     };
 }
 
-
 //謎題顯示區
 function renderPuzzleSection(room) {
     const puzzleWrapper = document.createElement("div");
@@ -341,10 +339,20 @@ function renderPuzzleSection(room) {
     let puzzleText = "";
     if (room === "國中房與紙條房") {
         puzzleText = "課表順序:\n國文-英文-數學 \n 國文-英文-數學\n巧克力順序:96%,30^";
-    } else if (room === "房間B") {
-        puzzleText = "房間B 的謎題：找到四個碎片組合起來，才能解開保險箱。";
+    } else if (room === "高中房") {
+        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+    } else if (room === "電影院") {
+        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+    } else if (room === "夜光漆通道") {
+        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+    } else if (room === "高三大考房") {
+        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+    } else if (room === "志願房") {
+        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
+    } else if (room === "最終通道") {
+        puzzleText = "自然答案:\nFe*2 \n 國文答案:\n迢迢牽牛星，皎皎河漢女\n纖纖擢素手，札札弄機杼\n朝代:漢朝\n節日:七夕";
     } else {
-        puzzleText = `${room} 的謎題尚未設定。`;
+        puzzleText = `${room} 此處無謎題。`;
     }
     puzzleContent.textContent = puzzleText;
 
