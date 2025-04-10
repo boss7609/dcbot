@@ -91,6 +91,16 @@ button:active {
 
 button.group {
   width: 100%;
+  text-align: left;
+  justify-content: flex-start; /* 如果你用了 flex 的話 */
+  padding-left: 14px; /* 左邊多一點 padding */
+}
+
+button.room {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start; /* 如果你用了 flex 的話 */
+  padding-left: 14px; /* 左邊多一點 padding */
 }
 
 button.item {
@@ -370,17 +380,66 @@ button.view-image:hover {
   position: absolute;
   top: 20px;
   right: 20px;
-  font-size: 24px;
-  background: var(--danger);
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  background: rgba(255, 68, 68, 0.9);
   color: white;
   border: none;
   border-radius: 50%;
-  padding: 6px 12px;
   cursor: pointer;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: background 0.2s ease;
 }
 
 .image-modal .close-btn:hover {
-  background: var(--danger-hover);
+  background: #e53935;
 }
+
+.loading-spinner {
+  font-size: 16px;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 8px;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.close-btn {
+  all: unset;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  font-size: 24px;
+  background: rgba(255, 68, 68, 0.9);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #e53935;
+}
+
+

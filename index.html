@@ -4,16 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>清點系統</title>
-  <link rel="stylesheet" href="style.css"/>
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<link href="https://fonts.googleapis.com/css2?family=Chalkboard&display=swap" rel="stylesheet">
+  <link id="theme-css" rel="stylesheet" href="style.css"/>
+  <style>
+#theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #fffacd;
+  color: #fffacd;
+  padding: 10px 14px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  backdrop-filter: blur(3px);
+}
+#theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+</style>
+
 </head>
 <body>
   <div id="header">
   <div id="time-display" class="time-display"></div>
   <div id="global-progress"></div>
   </div>
+  <div class="h1-center">
   <h1>🧾 復場清點系統</h1>
+  </div>
   <div id="app">載入中...</div>
-
-  <script src="app.js"></script>
+  <button id="theme-toggle-btn" title="切換主題">🎨</button>
+  <script src="app.js" defer></script>
 </body>
 </html>
