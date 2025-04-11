@@ -3,9 +3,19 @@ let currentRoom = null;
 let currentGroup = null;
 let puzzleVisibleState = {}; // 每個房間一個記錄
 let expandedGroupStates = {}; // 格式：expandedGroupStates[room][group] = true/false
+let timerInterval = null;
+let startTime = null;
+
 const app = document.getElementById("app");
-updateTime();
-setInterval(updateTime, 1000);
+
+window.addEventListener("load", () => {
+  const savedTime = localStorage.getItem("startTime");
+  if (savedTime) {
+    startTime = parseInt(savedTime, 10);
+    timerInterval = setInterval(updateTimerDisplay, 1000);
+    updateTimerDisplay();
+  }
+});
 
 //匯入Json
 fetch("items.json")
@@ -105,8 +115,8 @@ function showGroupList(room) {
 		itemBtn.onclick = () => {
 		  saved[item] = !saved[item];
 		  localStorage.setItem(key, JSON.stringify(saved));
-		  itemBtn.classList.toggle("completed");
-		  itemBtn.textContent = saved[item] ? `✅ ${item}` : `🟩 ${item}`;
+		  showGroupList(room);    // ✅ 更新 group 區域
+		  showRoomList();         // ✅ 更新 room 區域
 		};
         itemWrapper.appendChild(itemBtn);
       });
@@ -151,7 +161,6 @@ function showGroupList(room) {
   sectionWrapper.appendChild(action);
   groupSection.appendChild(sectionWrapper);
 }
-
 
 //物品清單
 function showItemList(room, group) {
@@ -229,6 +238,7 @@ function showResetModal() {
         localStorage.clear();
         modal.remove();
         showRoomList(); // 繼續顯示主畫面
+		startTimer();                      // ✅ 開始計時
     };
     document.getElementById("cancelReset").onclick = () => {
         modal.remove();
@@ -349,18 +359,30 @@ function renderPuzzleSection(room) {
 
 //顯示時間
 function updateTime() {
-    const now = new Date();
-    const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-    };
-    document.getElementById('time-display').textContent = now.toLocaleString('zh-TW', options);
+  const now = new Date();
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+
+  const timeString = now.toLocaleString('zh-TW', options);
+  let timerString = "";
+
+  if (startTime) {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
+    const seconds = String(elapsed % 60).padStart(2, "0");
+    timerString = ` ⏱ 復原用時：${minutes}:${seconds}`;
+  }
+
+  document.getElementById('time-display').textContent = timeString + timerString;
 }
+
 
 //房間按鈕生成
 function createRoomButtons(current) {
@@ -412,7 +434,6 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-
 //iOS不會被縮放
 document.addEventListener('gesturestart', function (e) {
   e.preventDefault();
@@ -444,4 +465,51 @@ if (btn) {
   btn.onclick = toggleCSS;
 }
 
+function startTimer() {
+  startTime = Date.now();
+  localStorage.setItem("startTime", startTime); // ✅ 儲存開始時間
+  updateTimerDisplay(); // 顯示一次（避免 1 秒延遲）
+  clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimerDisplay, 1000);
+}
 
+function updateTimerDisplay() {
+  const timerDisplay = document.getElementById("time-display");
+  const now = new Date();
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+  const timeString = now.toLocaleString('zh-TW', options);
+
+  let timerString = "";
+  if (startTime) {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
+    const seconds = String(elapsed % 60).padStart(2, "0");
+    timerString = ` ⏱ 復原用時：${minutes}:${seconds}`;
+  }
+
+  timerDisplay.textContent = timeString + timerString;
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  startTime = null;
+  localStorage.removeItem("startTime"); // ✅ 建議補上這行
+}
+
+const imagePaths = [
+  "images/room5-puzzle1.jpg",
+];
+
+imagePaths.forEach(path => {
+  const img = new Image();
+  img.src = path;
+});

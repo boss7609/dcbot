@@ -52,6 +52,7 @@ body {
   background: var(--bg-body);
   color: var(--text-body);
   line-height: 1.6;
+  overflow-y: scroll;
 }
 
 #app {
