@@ -16,19 +16,51 @@
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid #fffacd;
   color: #fffacd;
-  padding: 10px 14px;
   font-size: 18px;
+  padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
   z-index: 9999;
   box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   backdrop-filter: blur(3px);
+  transition: all 0.2s ease;
 }
-#theme-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+
+@media (max-width: 767px) and (min-width: 481px) {
+  #theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    padding: 0;
+    border-radius: 50%;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-sizing: border-box;
+  }
+}
+
+
+@media (max-width: 480px) {
+  #theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    padding: 0;
+    border-radius: 50%;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-sizing: border-box;
+  }
 }
 </style>
-
 </head>
 <body>
   <div id="header">
@@ -38,7 +70,11 @@
   <div class="h1-center">
   <h1>🧾 復場清點系統</h1>
   </div>
-  <div id="app">載入中...</div>
+  <div id="app">
+	  <div id="room-section"></div>
+	  <div id="group-section"></div>
+	  <div id="item-section"></div>
+  </div>
   <button id="theme-toggle-btn" title="切換主題">🎨</button>
   <script src="app.js" defer></script>
 </body>

@@ -58,6 +58,10 @@ body {
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 
+              0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
@@ -98,10 +102,11 @@ button.group {
 
 button.room {
   width: 100%;
-  text-align: left;
-  justify-content: flex-start; /* 如果你用了 flex 的話 */
-  padding-left: 14px; /* 左邊多一點 padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
 
 button.item {
   width: 98%;
@@ -442,4 +447,21 @@ button.view-image:hover {
   background: #e53935;
 }
 
-
+#theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--chalk-yellow);
+  color: var(--chalk-yellow);
+  padding: 10px 14px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  backdrop-filter: blur(3px);
+}
+#theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
