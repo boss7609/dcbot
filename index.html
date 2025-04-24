@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
+  <!-- 基本 Meta 標籤 -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="復場清點系統，幫助用戶高效管理房間物品清單">
+  
+  <!-- 標題與圖標 -->
   <title>清點系統</title>
-	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-	<link href="https://fonts.googleapis.com/css2?family=Chalkboard&display=swap" rel="stylesheet">
-  <link id="theme-css" rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <!-- 字體與樣式 -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chalkboard&display=swap">
+  <link id="theme-css" rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div id="header">
-  <div id="time-display" class="time-display"></div>
-  <div id="global-progress"></div>
-  </div>
-  <div class="h1-center">
-  <h1>🧾 復場清點系統</h1>
-  </div>
-  <div id="app">
-	  <div id="room-section"></div>
-	  <div id="group-section"></div>
-	  <div id="item-section"></div>
-  </div>
-  <button id="theme-toggle-btn" title="切換主題">🎨</button>
+<body class="theme-default">
+  <!-- 頁頭：顯示時間與進度 -->
+  <header id="header">
+    <div id="time-display" class="time-display"></div>
+    <div id="global-progress"></div>
+    <button id="theme-toggle-btn" title="切換主題">🎨</button>
+  </header>
+
+  <!-- 主標題 -->
+  <main id="app">
+    <h1 class="title-center">🧾 復場清點系統</h1>
+    
+    <!-- 房間、區域與物品清單 -->
+    <section id="room-section"></section>
+    <section id="group-section"></section>
+    <section id="item-section"></section>
+  </main>
+
+  <!-- 腳本 -->
   <script src="app.js" defer></script>
 </body>
 </html>
