@@ -56,36 +56,28 @@ function showRoomList() {
 function showGroupList(room) {
   currentRoom = room;
   currentGroup = null;
-
   const groupSection = document.getElementById("group-section");
   const itemSection = document.getElementById("item-section");
   groupSection.innerHTML = "";
   itemSection.innerHTML = ""; // 清空物品區
-
   const sectionWrapper = document.createElement("div");
   sectionWrapper.innerHTML = `<h2>${room} - 區域選擇：</h2>`;
   sectionWrapper.appendChild(renderPuzzleSection(room));
-
   const groupContainer = document.createElement("div");
   groupContainer.className = "container";
-
   if (!expandedGroupStates[room]) expandedGroupStates[room] = {};
-
   for (const groupName in data[room].groups) {
     const groupData = data[room].groups[groupName];
     const key = `status_${room}_${groupName}`;
     const saved = JSON.parse(localStorage.getItem(key) || "{}");
     const total = groupData.items.length;
     const done = groupData.items.filter(item => saved[item]).length;
-
     const wrapper = document.createElement("div");
-
     const btn = document.createElement("button");
     btn.className = `group group-${groupData.color}`;
     btn.textContent = `${done === total && total > 0 ? '✅ ' : '🟩'}${groupName} (${done}/${total})`;
     if (groupName === currentGroup) btn.classList.add("active");
     if (done === total && total > 0) btn.classList.add("completed");
-
     btn.onclick = () => {
       const wasExpanded = expandedGroupStates[room][groupName];
       for (const g in expandedGroupStates[room]) {
@@ -95,9 +87,7 @@ function showGroupList(room) {
       currentGroup = groupName;
       showGroupList(room); // 重新渲染
     };
-
     wrapper.appendChild(btn);
-
     // 物品清單
     if (expandedGroupStates[room][groupName]) {
       const itemWrapper = document.createElement("div");
@@ -132,21 +122,17 @@ function showGroupList(room) {
       itemWrapper.appendChild(resetBtn);
       wrapper.appendChild(itemWrapper);
     }
-
-    groupContainer.appendChild(wrapper);
+    
+	groupContainer.appendChild(wrapper);
   }
-
   sectionWrapper.appendChild(groupContainer);
-
   const action = document.createElement("div");
   action.className = "action-buttons";
-
   const backBtn = document.createElement("button");
   backBtn.className = "back";
   backBtn.textContent = "← 返回首頁";
   backBtn.onclick = showRoomList;
   action.appendChild(backBtn);
-
   const resetBtn = document.createElement("button");
   resetBtn.className = "reset";
   resetBtn.textContent = "↻ 重置整個房間資料";
@@ -157,9 +143,27 @@ function showGroupList(room) {
     showGroupList(room);
   };
   action.appendChild(resetBtn);
-
   sectionWrapper.appendChild(action);
   groupSection.appendChild(sectionWrapper);
+  //自動滾動 手機優化
+  requestAnimationFrame(() => {
+    const targetElement = document.getElementById("group-section");
+    if (targetElement) {
+      const elementPosition = targetElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - 20;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+      
+      if ('ontouchstart' in window) {
+        setTimeout(() => {
+          window.scrollBy(0, -100);
+        }, 300);
+      }
+    }
+  });
 }
 
 //物品清單
@@ -260,18 +264,18 @@ function renderPuzzleSection(room) {
     let puzzleText = "";
     let imagePath = "";
     if (room === "國中房與紙條房") {
-        puzzleText = "課表順序 ➔ 國文-英文-數學/國文-英文-數學\n巧克力順序:96%,30^";
+        puzzleText = "(懸賞題目:CABDE)\n1.傳單:能墨教育中心\n2.計畫表:\n 數學基本-自然預報-數學變化-自然結報-數學資優\n國文句型-英文閱測-國文作文-社會筆記-英文文法\n3.巧克力順序:\n65|60|96\n99|86|72";
     } else if (room === "考卷通道與國中大考房") {
-        puzzleText = "自然答案 ➔ Fe*2 \n 國文答案 ➔ 迢迢牽牛星，皎皎河漢女；纖纖擢素手，札札弄機杼\n朝代 ➔ 漢朝\n節日 ➔ 七夕";
+        puzzleText = "1.自然答案 ➔ Fe*2 \n 2.國文答案 ➔ 迢迢牽牛星，皎皎河漢女；纖纖擢素手，札札弄機杼\n3.朝代 ➔ 漢朝\n4.節日 ➔ 七夕";
     } else if (room === "高中房") {
-        puzzleText = "貓咪紳士予告信 ➔ 圍巾櫃密碼\n中間櫃子密碼 ➔ LOVED";
+        puzzleText = "1.中間櫃子密碼 ➔ LOVED";
     } else if (room === "電影院") {
-        puzzleText = "售票機 ➔ 2人 ➔ 穿著Prada的惡魔 ➔ 17:25";
+        puzzleText = "1.售票機:2人|Prda的惡魔|17:25\n2.置物櫃密碼 ➔ A50601(旗語:0601)\n";
     } else if (room === "高三大考房") {
         puzzleText = "國文科 ➔ A:鈞啟 B:謹緘 C:恭請 D:崇安 E:謹上\n數學科 ➔ 615m\n英文科 ➔ A:in B:on\n社會科 ➔ 雙首長制\n自然科 ➔ 6-甲基-3-辛酮";
         imagePath = "images/room5-puzzle1.jpg";
     } else if (room === "自殺房") {
-        puzzleText = "鑰匙鎖\n小 ➔ 不要重蹈覆轍\n中 ➔ 當媽媽的魁儡\n大 ➔ 怎麼會這樣\n特大 ➔ 2月29日\n盲人鎖\n▢▣\n▣▢\n▢▢\n▣▣";
+        puzzleText = "鑰匙鎖\n小 ➔ 不要重蹈覆轍\n中 ➔ 當媽媽的魁儡\n大 ➔ 怎麼會這樣\n特大 ➔ 2月29日\n盲人鎖\n▣▣\n▢▣\n▣▣\n▣▣\n▢▣\n▣▣";
     } else {
         puzzleText = `${room} 此處無謎題。`;
     }
