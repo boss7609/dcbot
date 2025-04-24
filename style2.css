@@ -1,118 +1,154 @@
-/* ===================
-   🏫 學校白板主題系統
-   =================== */
+/* 清點系統 CSS 樣式 */
+/* 黑板主題，支持 theme-default 和 theme-chalkboard */
 
-:root {
-  /* 🎨 黑板與粉筆色系 */
-  --chalk-white: #f8f8f8;
-  --chalk-yellow: #fffacd;
-  --chalk-blue: #add8e6;
-  --chalk-red: #ffb6c1;
-  --chalk-green: #98fb98;
-  --blackboard: #1a1a1a;
-  --blackboard-light: #2a2a2a;
-  
-  /* 📄 背景與文字 */
-  --bg-body: var(--blackboard);
-  --text-body: var(--chalk-white);
-  --border-color: #444;
-  
-  /* 🌫️ 陰影系統 */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
-  
-  /* ✏️ 白板筆效果 */
-  --marker-stroke: 1.2px;
+/* == 主題變數 == */
+.theme-default {
+  --bg-body: #f4f4f4;          /* 背景色：淺灰 */
+  --text-body: #333333;        /* 文字色：深灰 */
+  --border-color: #dddddd;     /* 邊框色：淺灰 */
+  --primary: #f29c97;          /* 主色：粉紅 */
+  --primary-active: #2c6dfb;   /* 活躍主色：藍 */
+  --success: #4e8cff;          /* 成功色：藍 */
+  --gray-light: #d3d3d3;       /* 淺灰 */
+  --gray-medium: #6c757d;      /* 中灰 */
+  --gray-dark: #5a6268;        /* 深灰 */
+  --danger: #dc3545;           /* 危險色：紅 */
+  --danger-hover: #c82333;     /* 危險色懸停 */
+  --text-light: #ffffff;       /* 亮文字：白 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 小陰影 */
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15); /* 中陰影 */
+  --completed-bg: #d4edda;     /* 完成背景：淺綠 */
 }
 
-/* ===================
-   🧼 重置樣式 + 基本結構
-   =================== */
+.theme-chalkboard {
+  --bg-body: #1a1a1a;          /* 背景色：黑板 */
+  --text-body: #f8f8f8;        /* 文字色：粉筆白 */
+  --border-color: #444444;     /* 邊框色：深灰 */
+  --primary: #ffb6c1;          /* 主色：粉筆紅 */
+  --primary-active: #add8e6;   /* 活躍主色：粉筆藍 */
+  --success: #98fb98;          /* 成功色：粉筆綠 */
+  --gray-light: #6c757d;       /* 淺灰 */
+  --gray-medium: #adb5bd;      /* 中灰 */
+  --gray-dark: #868e96;        /* 深灰 */
+  --danger: #ff6b6b;           /* 危險色：亮紅 */
+  --danger-hover: #e63946;     /* 危險色懸停 */
+  --text-light: #fffacd;       /* 亮文字：粉筆黃 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);  /* 小陰影 */
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);  /* 中陰影 */
+  --completed-bg: #98fb98;     /* 完成背景：粉筆綠 */
+}
 
+/* == 全局樣式 == */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Chalkboard', 'Segoe UI', 'Marker Felt', sans-serif;
-  letter-spacing: 0.5px;
 }
 
 body {
-  padding: 20px 20px 20px 20px;
+  font-family: 'Chalkboard', 'Marker Felt', 'Segoe UI', sans-serif;
   background: var(--bg-body);
   color: var(--text-body);
   line-height: 1.6;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(40,40,40,0.8) 0%, transparent 20%),
-    radial-gradient(circle at 90% 80%, rgba(40,40,40,0.8) 0%, transparent 20%);
+  padding: 20px;
+  min-height: 100vh;
   overflow-y: scroll;
+  background-image: radial-gradient(circle at 10% 20%, rgba(40, 40, 40, 0.8) 0%, transparent 20%),
+                    radial-gradient(circle at 90% 80%, rgba(40, 40, 40, 0.8) 0%, transparent 20%);
 }
 
-#app {
+main#app {
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
   background: rgba(30, 30, 30, 0.7);
   border-radius: 10px;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
               0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.h1-center {
-  text-align: center;
+/* == 頁頭 == */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-h1 {
+.time-display {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: rgba(30, 30, 30, 0.9);
+  color: var(--text-light);
+  box-shadow: var(--shadow-md);
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Courier New', monospace;
+}
+
+/* == 主標題 == */
+h1.title-center {
   text-align: center;
   font-size: 2.2rem;
-  color: var(--chalk-yellow);
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  margin-bottom: 20px;
+  color: var(--text-light);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 20px 0;
   position: relative;
   display: inline-block;
   padding: 0 20px;
 }
 
-h1::after {
-  content: "";
+h1.title-center::after {
+  content: '';
   position: absolute;
   bottom: -5px;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--chalk-yellow), transparent);
+  background: linear-gradient(90deg, transparent, var(--text-light), transparent);
 }
-/* ===================
-   🧩 白板筆按鈕系統
-   =================== */
 
+/* == 容器 == */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+/* == 按鈕共用樣式 == */
 button {
   padding: 12px 20px;
   margin: 8px;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
+  background: rgba(40, 40, 40, 0.7);
+  color: var(--text-light);
   font-size: 1.1rem;
   font-weight: 600;
-  transition: all 0.2s ease-out;
-  box-shadow: var(--shadow-sm);
+  cursor: pointer;
   text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease-out,
+              background-color 0.2s ease,
+              box-shadow 0.2s ease;
   position: relative;
   overflow: hidden;
-  background-color: var(--blackboard-light);
-  color: var(--chalk-white);
-  border: 1px solid rgba(255,255,255,0.1);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 button::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1));
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -120,7 +156,7 @@ button::before {
 button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  background-color: var(--blackboard);
+  background: rgba(60, 60, 60, 0.7);
 }
 
 button:hover::before {
@@ -131,25 +167,7 @@ button:active {
   transform: translateY(0);
 }
 
-/* 特殊按鈕樣式 */
-button.group {
-  width: 100%;
-  min-height: 60px;
-  padding-left: 20px;
-  text-align: left;
-  font-size: 1.2rem;
-  position: relative;
-}
-
-button.group::after {
-  content: "→";
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0.7;
-}
-
+/* 房間按鈕 */
 button.room {
   width: 100%;
   display: flex;
@@ -157,167 +175,181 @@ button.room {
   align-items: center;
 }
 
+button.room.active {
+  background: var(--primary-active);
+}
 
+button.room.completed {
+  background: var(--completed-bg);
+}
+
+/* 區域按鈕 */
+button.group {
+  width: 100%;
+  min-height: 60px;
+  padding-left: 20px;
+  text-align: left;
+  position: relative;
+}
+
+button.group::after {
+  content: '→';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+button.group.active {
+  background: var(--primary-active);
+}
+
+button.group.completed {
+  background: var(--completed-bg);
+}
+
+.group-green {
+  background: rgba(144, 238, 144, 0.15);
+  border-left: 4px solid var(--success);
+  color: var(--success);
+}
+
+.group-orange {
+  background: rgba(255, 255, 153, 0.15);
+  border-left: 4px solid var(--text-light);
+  color: var(--text-light);
+}
+
+.group-gray {
+  background: rgba(200, 200, 200, 0.15);
+  border-left: 4px solid var(--text-body);
+  color: var(--text-body);
+}
+
+.group-purple {
+  background: rgba(221, 160, 221, 0.15);
+  border-left: 4px solid var(--primary);
+  color: var(--primary);
+}
+
+/* 物品按鈕 */
 button.item {
   width: 98%;
   min-width: 200px;
   padding: 12px 16px;
   text-align: left;
-  background: rgba(50,50,50,0.7);
-  border-left: 4px solid var(--chalk-blue);
-  font-size: 1rem;
+  background: rgba(50, 50, 50, 0.7);
+  border-left: 4px solid var(--primary-active);
   white-space: normal;
-  line-height: 1.5;
+  font-size: 1rem;
 }
 
 button.item.completed {
-  background: rgba(30,70,30,0.7);
-  border-left-color: var(--chalk-green);
+  background: rgba(30, 70, 30, 0.7);
+  border-left: 4px solid var(--completed-bg);
   padding-right: 40px;
 }
 
 button.item.completed::before {
-  content: "✓";
+  content: '✓';
   position: absolute;
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.2em;
-  color: var(--chalk-green);
+  font-size: 1.2rem;
+  color: var(--completed-bg);
 }
 
-/* 按鈕顏色變體 */
-.group-green {
-  background-color: rgba(144, 238, 144, 0.15);
-  border-left-color: var(--chalk-green);
-  color: var(--chalk-green);
-}
-
-.group-orange {
-  background-color: rgba(255, 255, 153, 0.15);
-  border-left-color: var(--chalk-yellow);
-  color: var(--chalk-yellow);
-}
-
-.group-gray {
-  background-color: rgba(200, 200, 200, 0.15);
-  border-left-color: var(--chalk-white);
-  color: var(--chalk-white);
-}
-
-.group-purple {
-  background-color: rgba(221, 160, 221, 0.15);
-  border-left-color: #d8a0ff;
-  color: #d8a0ff;
+/* 動作按鈕 */
+.back {
+  background: rgba(80, 80, 80, 0.7);
+  border-left: 4px solid var(--gray-medium);
+  color: var(--text-light);
 }
 
 .reset {
-  background: rgba(70,30,30,0.7) !important;
-  border-left: 4px solid var(--chalk-red) !important;
+  background: rgba(70, 30, 30, 0.7);
+  border-left: 4px solid var(--danger);
+  color: var(--text-light);
 }
 
-.completed {
-  background: rgba(30,70,30,0.7) !important;
+.reset:hover {
+  background: rgba(90, 40, 40, 0.7);
 }
 
-/* ===================
-   🏫 教室元素樣式
-   =================== */
-
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 15px;
-  margin: 20px 0;
+/* 物品容器 */
+.item-wrapper {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-body);
+  box-shadow: var(--shadow-sm);
 }
 
-/* 白板效果 */
+/* 謎題區塊 */
+button.puzzle {
+  background: rgba(60, 60, 60, 0.7);
+  color: var(--text-light);
+  padding: 12px 25px;
+  margin: 15px 0 15px 15px;
+  border-left: 4px solid var(--text-light);
+  width: fit-content;
+  display: block;
+}
+
+button.puzzle:hover {
+  background: rgba(80, 80, 80, 0.7);
+}
+
 .puzzle-content {
-  background: rgba(20,20,20,0.8);
-  border: 2px solid rgba(255,255,255,0.1);
+  background: rgba(20, 20, 20, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 20px;
   margin: 15px 0 0 15px;
   font-family: 'Marker Felt', 'Microsoft JhengHei', sans-serif;
   font-size: 1.1rem;
   line-height: 1.7;
-  color: var(--chalk-white);
+  color: var(--text-body);
   box-shadow: var(--shadow-sm);
   white-space: pre-line;
   position: relative;
 }
 
 .puzzle-content::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 100%;
-  background: 
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
   pointer-events: none;
   border-radius: 6px;
 }
 
-button.puzzle {
-  background: rgba(60,60,60,0.7);
-  color: var(--chalk-yellow);
+button.view-image {
+  background: rgba(60, 60, 60, 0.7);
+  color: var(--primary-active);
+  border-left: 4px solid var(--primary-active);
   padding: 12px 25px;
-  margin: 15px 0 15px 15px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-left: 4px solid var(--chalk-yellow);
-  display: block;
+  margin: 15px 0;
   width: fit-content;
 }
 
-button.puzzle:hover {
-  background: rgba(80,80,80,0.7);
-}
-
-button.view-image {
-  background: rgba(60,60,60,0.7);
-  color: var(--chalk-blue);
-  border-left: 4px solid var(--chalk-blue);
-  margin: 15px 0;
-}
-
 button.view-image:hover {
-  background: rgba(80,80,80,0.7);
+  background: rgba(80, 80, 80, 0.7);
 }
 
-/* ===================
-   🕒 教室時鐘樣式
-   =================== */
-
-.time-display {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: rgba(30,30,30,0.9);
-  color: var(--chalk-yellow);
-  box-shadow: var(--shadow-md);
-  z-index: 1000;
-  border: 1px solid rgba(255,255,255,0.1);
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-}
-
-/* ===================
-   🪟 教室模態框樣式
-   =================== */
-
+/* 彈窗 */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75); /* 稍微深一點比較穩重 */
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -325,22 +357,41 @@ button.view-image:hover {
 }
 
 .modal {
-  background: rgba(30, 30, 30, 0.95); /* 微透明黑板感 */
+  background: rgba(30, 30, 30, 0.95);
   border: 2px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-  border-radius: 12px;
   padding: 30px 40px;
-  color: var(--chalk-white);
-  text-align: center;
+  border-radius: 12px;
+  color: var(--text-body);
   max-width: 400px;
   width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow-md);
   font-family: 'Marker Felt', 'Segoe UI', sans-serif;
   font-size: 1.1rem;
-  line-height: 1.6;
   animation: modalFadeIn 0.25s ease-out;
 }
 
+.modal h2 {
+  margin-bottom: 10px;
+}
 
+.modal p {
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 圖片彈窗 */
 .image-modal {
   position: fixed;
   inset: 0;
@@ -356,51 +407,84 @@ button.view-image:hover {
   max-width: 90vw;
   max-height: 80vh;
   object-fit: contain;
-  display: block;
-  background: #fff;
+  background: #ffffff;
   border-radius: 10px;
   box-shadow: var(--shadow-md);
 }
-.image-modal .close-btn {
+
+.close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
   width: 36px;
   height: 36px;
-  font-size: 22px;
   background: rgba(255, 68, 68, 0.9);
-  color: white;
+  color: var(--text-light);
   border: none;
   border-radius: 50%;
-  cursor: pointer;
-  z-index: 10;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: background 0.2s ease;
 }
 
-.image-modal .close-btn:hover {
+.close-btn:hover {
   background: #e53935;
 }
 
+.loading-spinner {
+  font-size: 1rem;
+  color: var(--text-light);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 8px;
+  animation: pulse 1s infinite ease-in-out;
+}
 
-/* ===================
-   📱 響應式設計
-   =================== */
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
 
+/* 主題切換按鈕 */
+#theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--text-light);
+  color: var(--text-light);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  transition: background 0.2s ease,
+              transform 0.15s ease;
+}
+
+#theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 響應式設計 */
 @media (max-width: 768px) {
-  #app {
-    padding: 15px;
+  main#app {
     margin: 20px auto;
+    padding: 15px;
   }
 
   .container {
     grid-template-columns: 1fr;
   }
 
-  button, button.item {
+  button {
     width: 100%;
     margin: 6px 0;
   }
@@ -410,34 +494,49 @@ button.view-image:hover {
     margin: 0 auto 20px;
     width: fit-content;
   }
-  
-  h1 {
+
+  button.item {
+    width: 100%;
+  }
+
+  h1.title-center {
     font-size: 1.8rem;
+  }
+
+  #theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    bottom: 16px;
+    right: 16px;
+  }
+
+  #theme-toggle-btn span {
+    display: none;
   }
 }
 
-.close-btn {
-  all: unset; /* ✅ 這一行會清掉其他 button 的樣式污染 */
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 68, 68, 0.9);
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  transition: background 0.2s ease;
+@media (max-width: 480px) {
+  #theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  h1.title-center {
+    font-size: 1.5rem;
+  }
 }
 
-.close-btn:hover {
-  background: #e53935;
+@media (min-width: 1200px) {
+  #theme-toggle-btn {
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 18px;
+    font-size: 1.25rem;
+  }
 }
-

@@ -1,88 +1,139 @@
-/* ===================
-   🌈 全站統一樣式系統
-   =================== */
+/* 清點系統 CSS 樣式 */
+/* 淺色主題，支持 theme-default 和 theme-chalkboard */
 
-:root {
-  /* 🎨 色彩系統 */
-  --primary: #f29c97;
-  --primary-active: #2c6dfb;
-  --success: #4e8cff;
-  --gray-light: #d3d3d3;
-  --gray-medium: #6c757d;
-  --gray-dark: #5a6268;
-  --danger: #dc3545;
-  --danger-hover: #c82333;
-  --text-light: white;
-
-  /* 📄 背景與文字 */
-  --bg-body: #f4f4f4;
-  --text-body: #333;
-  --border-color: #ddd;
-
-  /* 🌫️ 陰影系統 */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+/* == 主題變數 == */
+.theme-default {
+  --bg-body: #f4f4f4;          /* 背景色：淺灰 */
+  --text-body: #333333;        /* 文字色：深灰 */
+  --border-color: #dddddd;     /* 邊框色：淺灰 */
+  --primary: #f29c97;          /* 主色：粉紅 */
+  --primary-active: #2c6dfb;   /* 活躍主色：藍 */
+  --success: #4e8cff;          /* 成功色：藍 */
+  --gray-light: #d3d3d3;       /* 淺灰 */
+  --gray-medium: #6c757d;      /* 中灰 */
+  --gray-dark: #5a6268;        /* 深灰 */
+  --danger: #dc3545;           /* 危險色：紅 */
+  --danger-hover: #c82333;     /* 危險色懸停 */
+  --text-light: #ffffff;       /* 亮文字：白 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 小陰影 */
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15); /* 中陰影 */
+  --completed-bg: #d4edda;     /* 完成背景：淺綠 */
 }
 
-/* 🌙 夜間模式 */
+.theme-chalkboard {
+  --bg-body: #1a1a1a;          /* 背景色：黑板 */
+  --text-body: #f8f8f8;        /* 文字色：粉筆白 */
+  --border-color: #444444;     /* 邊框色：深灰 */
+  --primary: #ffb6c1;          /* 主色：粉筆紅 */
+  --primary-active: #add8e6;   /* 活躍主色：粉筆藍 */
+  --success: #98fb98;          /* 成功色：粉筆綠 */
+  --gray-light: #6c757d;       /* 淺灰 */
+  --gray-medium: #adb5bd;      /* 中灰 */
+  --gray-dark: #868e96;        /* 深灰 */
+  --danger: #ff6b6b;           /* 危險色：亮紅 */
+  --danger-hover: #e63946;     /* 危險色懸停 */
+  --text-light: #fffacd;       /* 亮文字：粉筆黃 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);  /* 小陰影 */
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);  /* 中陰影 */
+  --completed-bg: #98fb98;     /* 完成背景：粉筆綠 */
+}
+
+/* 暗色模式（系統偏好） */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg-body: #222;
-    --text-body: #eee;
-    --gray-light: #444;
-    --border-color: #555;
+  .theme-default {
+    --bg-body: #222222;
+    --text-body: #eeeeee;
+    --border-color: #555555;
+    --gray-light: #444444;
     --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 }
 
-/* ===================
-   🧼 重置樣式 + 基本結構
-   =================== */
-
+/* == 全局樣式 == */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
-  padding: 20px;
+  font-family: 'Chalkboard', 'Segoe UI', system-ui, sans-serif;
   background: var(--bg-body);
   color: var(--text-body);
   line-height: 1.6;
+  padding: 20px;
+  min-height: 100vh;
   overflow-y: scroll;
 }
 
-#app {
+main#app {
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
+  padding-top: 50px;  /* 預留 time-display 空間（約 40px 高 + 10px 間距） */
   background: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1),
               0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-h1 {
-  text-align: center;
+/* == 頁頭 == */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-/* ===================
-   🧩 按鈕樣式與動效
-   =================== */
+/* 時間顯示 */
+.time-display {
+  position: fixed;
+  top: 20px;    /* 右上角，符合視覺角度 */
+  right: 20px;  /* 右上角，與 style2.css 一致 */
+  padding: 10px 20px; /* 保留你喜歡的高度 */
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.6); /* 更透明，減少視覺遮擋 */
+  color: var(--text-light);
+  box-shadow: var(--shadow-md);
+  font-size: 1.1rem;
+  font-weight: bold;
+  z-index: 1000; /* 高於內容，低於模態框 */
+}
 
+/* == 主標題 == */
+h1.title-center {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+/* == 容器 == */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+/* == 按鈕共用樣式 == */
 button {
   padding: 10px 16px;
   margin: 8px;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
+  background: var(--primary);
+  color: var(--text-light);
   font-size: 1rem;
-  transition: transform 0.15s ease-out, background-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: var(--shadow-sm);
+  cursor: pointer;
   text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease-out,
+              background-color 0.2s ease,
+              box-shadow 0.2s ease;
 }
 
 button:hover {
@@ -94,13 +145,7 @@ button:active {
   transform: translateY(0);
 }
 
-button.group {
-  width: 100%;
-  text-align: left;
-  justify-content: flex-start; /* 如果你用了 flex 的話 */
-  padding-left: 14px; /* 左邊多一點 padding */
-}
-
+/* 房間按鈕 */
 button.room {
   width: 100%;
   display: flex;
@@ -108,219 +153,93 @@ button.room {
   align-items: center;
 }
 
+button.room.active {
+  background: var(--primary-active);
+}
 
+button.room.completed {
+  background: var(--completed-bg);
+}
+
+/* 區域按鈕 */
+button.group {
+  width: 100%;
+  text-align: left;
+  padding-left: 14px;
+}
+
+button.group.active {
+  background: var(--primary-active);
+}
+
+button.group.completed {
+  background: var(--completed-bg);
+}
+
+.group-green { background: #57d857; color: var(--text-light); }
+.group-gray { background: #6c757d; color: var(--text-light); }
+.group-orange { background: #ffa500; color: #000000; }
+.group-purple { background: #a05aff; color: var(--text-light); }
+
+/* 物品按鈕 */
 button.item {
   width: 98%;
   min-width: 160px;
   max-width: 100%;
   padding: 10px 14px;
-  font-size: 1rem;
   text-align: left;
   white-space: normal;
-  background-color: var(--gray-light);
+  background: var(--gray-light);
   color: var(--text-body);
-  box-shadow: var(--shadow-sm);
-  border-radius: 8px;
-  transition: box-shadow 0.2s, transform 0.15s;
 }
 
 button.item.completed {
-  background-color: var(--success);
+  background: var(--completed-bg);
   color: var(--text-light);
 }
 
-button.item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+/* 物品容器 */
+.item-wrapper {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-body);
+  box-shadow: var(--shadow-sm);
 }
 
-
-/* ✨ 類別變體 */
-.room,
-.group {
-  background-color: var(--primary);
-  color: var(--text-light);
-}
-
-.item {
-  background-color: var(--gray-light);
-  color: var(--text-body);
-}
-
-.completed,
-.item.completed,
-.group.completed {
-  background-color: var(--success);
-  color: var(--text-light);
-}
-
+/* 動作按鈕 */
 .back {
-  background-color: var(--gray-medium);
+  background: var(--gray-medium);
   color: var(--text-light);
 }
 
 .reset {
-  background-color: var(--danger);
+  background: var(--danger);
   color: var(--text-light);
 }
 
 .reset:hover {
-  background-color: var(--danger-hover);
+  background: var(--danger-hover);
 }
 
-/* 🎨 區域色彩標記 */
-.group-green {
-  background-color: #57d857;
-  color: white;
-}
-
-.group-gray {
-  background-color: #6c757d;
-  color: white;
-}
-
-.group-orange {
-  background-color: #ffa500;
-  color: black;
-}
-
-.group-purple {
-  background-color: #a05aff;
-  color: white;
-}
-
-.container > div {
-  width: 100%;
-}
-
-
-/* ===================
-   🧱 版面排版
-   =================== */
-
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 15px;
-  margin: 20px 0;
-}
-
-/* ===================
-   🕒 固定時間顯示
-   =================== */
-
-.time-display {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  box-shadow: var(--shadow-md);
-  z-index: 1000;
-}
-
-@media (prefers-color-scheme: dark) {
-  .time-display {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-light);
-  }
-}
-
-/* ===================
-   📱 響應式設計
-   =================== */
-
-/* 平板和小型設備 (481px-767px) */
-@media (max-width: 768px) {
-  #theme-toggle-btn {
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 20px;
-    bottom: 16px;
-    right: 16px;
-  }
-  
-  /* 可選：隱藏文字只顯示圖標 */
-  #theme-toggle-btn span {
-    display: none;
-  }
-  
-    #app {
-    padding: 10px;
-    margin-top: 20px;
-  }
-
-  .container {
-    grid-template-columns: 1fr;
-  }
-
-  button {
-    width: 100%;
-    margin: 4px 0;
-  }
-
-  .time-display {
-    position: static;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  .item {
-    width: 100%;
-  }
-}
-
-/* 手機設備 (≤480px) */
-@media (max-width: 480px) {
-  #theme-toggle-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    bottom: 12px;
-    right: 12px;
-  }
-}
-
-/* 超大設備 (≥1200px) 可選 */
-@media (min-width: 1200px) {
-  #theme-toggle-btn {
-    bottom: 30px;
-    right: 30px;
-    padding: 12px 18px;
-    font-size: 20px;
-  }
-}
-
-
-/* ===================
-   🧠 謎題區塊樣式
-   =================== */
-
+/* 謎題區塊 */
 button.puzzle {
-  background-color: var(--primary);
-  color: white;
+  background: var(--primary);
   padding: 12px 20px;
-  margin: 10px 0 10px 8px; /* <-- auto 表示往右推 */
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  display: block;        /* 讓它獨佔一行 */
-  width: fit-content;    /* 寬度剛好包住文字 */
+  margin: 10px 0 10px 8px;
+  width: fit-content;
+  display: block;
 }
-
 
 .puzzle-content {
-  background: #fffdf5; /* 比純白稍微暖一點 */
-  border: 2px solid #aaa; /* 比原本的淺灰明顯一些 */
+  background: #fffdf5;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   padding: 15px;
   margin: 10px 0 0 10px;
   font-family: 'Microsoft JhengHei', sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.6;
   color: #2d3748;
   box-shadow: var(--shadow-sm);
@@ -328,29 +247,17 @@ button.puzzle {
 }
 
 button.view-image {
-  background-color: var(--primary); /* 跟 .puzzle 一樣的粉色 */
-  color: white;
+  background: var(--primary);
   padding: 12px 20px;
   margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  box-shadow: var(--shadow-sm);
-  transition: background-color 0.2s ease, transform 0.15s ease-out;
+  width: fit-content;
 }
 
 button.view-image:hover {
-  background-color: #e28580; /* hover 時稍微深一點的粉色 */
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background: var(--primary-active);
 }
 
-
-/* ===================
-   🪟 自訂 Modal 樣式
-   =================== */
-
+/* 彈窗 */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -366,8 +273,8 @@ button.view-image:hover {
   padding: 30px 40px;
   border-radius: 10px;
   box-shadow: var(--shadow-md);
-  width: 100%;
   max-width: 400px;
+  width: 100%;
   text-align: center;
   animation: modalFadeIn 0.25s ease-out;
 }
@@ -382,22 +289,17 @@ button.view-image:hover {
 
 .modal-actions {
   display: flex;
-  justify-content: space-around;
   gap: 15px;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
 @keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
+/* 圖片彈窗 */
 .image-modal {
   position: fixed;
   inset: 0;
@@ -413,71 +315,26 @@ button.view-image:hover {
   max-width: 90vw;
   max-height: 80vh;
   object-fit: contain;
-  display: block;
-  background: #fff;
+  background: #ffffff;
   border-radius: 10px;
   box-shadow: var(--shadow-md);
 }
 
-/* ✨ X 按鈕永遠固定右上角 */
-.image-modal .close-btn {
+.close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
   width: 36px;
   height: 36px;
-  font-size: 22px;
   background: rgba(255, 68, 68, 0.9);
-  color: white;
+  color: var(--text-light);
   border: none;
   border-radius: 50%;
-  cursor: pointer;
-  z-index: 10;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: background 0.2s ease;
-}
-
-.image-modal .close-btn:hover {
-  background: #e53935;
-}
-
-.loading-spinner {
-  font-size: 16px;
-  color: white;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 10px 20px;
-  border-radius: 8px;
-  animation: pulse 1s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.close-btn {
-  all: unset;
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  font-size: 24px;
-  background: rgba(255, 68, 68, 0.9);
-  color: white;
-  border-radius: 50%;
   cursor: pointer;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: background 0.2s ease;
 }
@@ -486,26 +343,105 @@ button.view-image:hover {
   background: #e53935;
 }
 
+.loading-spinner {
+  font-size: 1rem;
+  color: var(--text-light);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 8px;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* 主題切換按鈕 */
 #theme-toggle-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid #fffacd;
-  color: #fffacd;
-  font-size: 18px;
+  border: 2px solid var(--text-light);
+  color: var(--text-light);
   padding: 10px 14px;
   border-radius: 8px;
+  font-size: 1.1rem;
   cursor: pointer;
   z-index: 9999;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(3px);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: background 0.2s ease,
+              transform 0.15s ease;
 }
 
 #theme-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  main#app {
+    margin: 20px auto;
+    padding-top: 20px; /* 平板：減少頂部空間 */
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  button {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  .time-display {
+    top: 16px;   /* 平板：略微調整 */
+    right: 16px;
+    padding: 8px 16px; /* 縮小間距 */
+    font-size: 1rem;
+  }
+
+  button.item {
+    width: 100%;
+  }
+
+  #theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    bottom: 16px;
+    right: 16px;
+  }
+
+  #theme-toggle-btn span {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  #theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  h1.title-center {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  #theme-toggle-btn {
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 18px;
+    font-size: 1.25rem;
+  }
 }
