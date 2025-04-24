@@ -232,8 +232,24 @@ button.item:hover {
    📱 響應式設計
    =================== */
 
+/* 平板和小型設備 (481px-767px) */
 @media (max-width: 768px) {
-  #app {
+  #theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 20px;
+    bottom: 16px;
+    right: 16px;
+  }
+  
+  /* 可選：隱藏文字只顯示圖標 */
+  #theme-toggle-btn span {
+    display: none;
+  }
+  
+    #app {
     padding: 10px;
     margin-top: 20px;
   }
@@ -256,6 +272,28 @@ button.item:hover {
     width: 100%;
   }
 }
+
+/* 手機設備 (≤480px) */
+@media (max-width: 480px) {
+  #theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    bottom: 12px;
+    right: 12px;
+  }
+}
+
+/* 超大設備 (≥1200px) 可選 */
+@media (min-width: 1200px) {
+  #theme-toggle-btn {
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 18px;
+    font-size: 20px;
+  }
+}
+
 
 /* ===================
    🧠 謎題區塊樣式
@@ -453,16 +491,21 @@ button.view-image:hover {
   bottom: 20px;
   right: 20px;
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid var(--chalk-yellow);
-  color: var(--chalk-yellow);
-  padding: 10px 14px;
+  border: 2px solid #fffacd;
+  color: #fffacd;
   font-size: 18px;
+  padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
   z-index: 9999;
   box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   backdrop-filter: blur(3px);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 #theme-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.2);
 }
